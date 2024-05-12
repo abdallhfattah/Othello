@@ -1,23 +1,33 @@
 import pygame
-from .constants import RED, WHITE, BLUE, SQUARE_SIZE
+
 from .board import Board
+from .constants import BLACK, BLUE, SQUARE_SIZE, WHITE
+from .piece import Piece
 
 
 class Game:
-    def __init__(self, win):
+    def __init__(self, window):
         self._init()
-        self.win = win
+        self.window = window
 
     def update(self):
-        self.board.draw(self.win)
+        self.board.draw(self.window)
+        #
+        self.get_vaild_moves() # i want the piece to draw for it self the vaild moves that it could get
+
         self.draw_valid_moves(self.valid_moves)
+
         pygame.display.update()
 
     def _init(self):
         self.selected = None
         self.board = Board()
-        self.turn = RED
-        self.valid_moves = {}
+        self.turn = BLACK
+        self.valid_moves = set()
+
+    def get_vaild_moves(self):
+        self.valid_moves = self.board.get_moves(self.turn)
+        print(self.valid_moves)
 
     def winner(self):
         return self.board.winner()
@@ -26,49 +36,29 @@ class Game:
         self._init()
 
     def select(self, row, col):
-        if self.selected:
-            result = self._move(row, col)
-            if not result:
-                self.selected = None
-                self.select(row, col)
-
-        piece = self.board.get_piece(row, col)
-        if piece != 0 and piece.color == self.turn:
-            self.selected = piece
-            self.valid_moves = self.board.get_valid_moves(piece)
-            return True
-
-        return False
-
-    def _move(self, row, col):
-        piece = self.board.get_piece(row, col)
-        if self.selected and piece == 0 and (row, col) in self.valid_moves:
-            self.board.move(self.selected, row, col)
-            skipped = self.valid_moves[(row, col)]
-            if skipped:
-                self.board.remove(skipped)
-            self.change_turn()
-        else:
-            return False
-
-        return True
+        move = (row , col)
+        if move in self.valid_moves:
+            self.board.insert_piece(row,  col , self.turn)
+            # flip the turn
+            self.turn = WHITE if self.turn == BLACK else BLACK
 
     def draw_valid_moves(self, moves):
         for move in moves:
             row, col = move
-            pygame.draw.circle(self.win, BLUE, (col * SQUARE_SIZE +
-                               SQUARE_SIZE//2, row * SQUARE_SIZE + SQUARE_SIZE//2), 15)
+            pygame.draw.circle(self.window, self.turn, (col * SQUARE_SIZE + SQUARE_SIZE//2,
+                                                        row * SQUARE_SIZE + SQUARE_SIZE//2), 40, width=1)
 
     def change_turn(self):
+        """changing turn between opponents"""
         self.valid_moves = {}
-        if self.turn == RED:
+        if self.turn == BLACK:
             self.turn = WHITE
         else:
-            self.turn = RED
+            self.turn = BLACK
 
     def get_board(self):
         return self.board
 
-    def ai_move(self, board):
-        self.board = board
-        self.change_turn()
+    # def ai_move(self, board):
+    #     self.board = board
+    #     self.change_turn()
