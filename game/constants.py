@@ -15,15 +15,17 @@ BLUE = (0, 0, 255)
 GREY = (128, 128, 128)
 
 GREEN = (0, 188, 140)
-
-# directions
+ 
+# directions ([1, 1], [-1, -1], [-1, 1], [1, -1])
 DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
 
 # Render
 FPS = 60
 
-# Utility function 
+# Utility function
+
+
 def get_coordinate_mouse(pos):
     x, y = pos
     row = y // SQUARE_SIZE
