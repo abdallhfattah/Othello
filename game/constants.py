@@ -35,4 +35,4 @@ PADDING = 15
 OUTLINE = 2
 
 # ai level
-SEARCH_DEPTH = 5  
+SEARCH_DEPTH = 5

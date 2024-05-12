@@ -35,8 +35,6 @@ def main():
                 pos = pygame.mouse.get_pos()
                 row, col = get_coordinate_mouse(pos)
                 game.select(row, col)
-                pygame.time.delay(10000)
-                
 
         game.update()
     pygame.quit()   

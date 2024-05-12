@@ -41,7 +41,7 @@ class Board:
         return self.white_left - self.black_left
 
     def get_board_pieces(self, color):
-        """gets the board peices based on the color"""
+        """gets the board pieces based on the color"""
         pieces = []
         for row in self.board:
             for piece in row:
@@ -57,25 +57,29 @@ class Board:
 
     def flip_pieces(self, row, col):
         # my color
+        pieces_to_flip = []
         color = self.board[row][col]
 
         # try moving in 4 directions
         for x,  y in DIRECTIONS:
             curr_row = row + x
             curr_col = col + y
-            # flip untill you find a empty spot
+            # flip until you find a empty spot
             while curr_row in range(8) and curr_col in range(8):
                 # found my color , or empty spot
                 if self.board[curr_row][curr_col] == 0 or self.board[curr_row][curr_col].color == color:
+                    print('color: ', color)
                     break
-
                 # flip it
                 else:
-                    self.board[curr_row][curr_col].flip()
+                    # pieces_to_flip.append(self.board[curr_row][curr_col])
+                    pieces_to_flip.append((curr_row, curr_col))
 
                 # update the moves
                 curr_row += x
                 curr_col += y
+        print(pieces_to_flip)
+        return pieces_to_flip
 
     def get_moves(self, color):
         """gets all the  vaild move for a color"""
@@ -83,11 +87,11 @@ class Board:
         # insure there is no duplication , minimizing the time taken by the minimax algorithm
         moves = set()
 
-        # get all the peices inside the board with color
-        for peice in self.get_board_pieces(color):
+        # get all the pieces inside the board with color
+        for piece in self.get_board_pieces(color):
 
             # get vaild moves for this piece
-            for x, y in self.get_valid_moves(peice):
+            for x, y in self.get_valid_moves(piece):
                 moves.add((x, y))
         return moves
 
@@ -97,6 +101,7 @@ class Board:
         """
         moves = []
         # add [1, 1], [-1, -1], [-1, 1], [1, -1] to add diagonals
+        # DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
         # 0 1 -> right
         # 0 -1 -> left
@@ -117,7 +122,7 @@ class Board:
 
             while row in range(8) and col in range(8):
                 curr_piece = self.board[row][col]
-                if curr_piece == 0:
+                if curr_piece == 0 or curr_piece.color == piece.color:
                     if IS_OPPONENT:
                         moves.append((row, col))
                     break
