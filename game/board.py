@@ -38,7 +38,7 @@ class Board:
 
     # utility function
     def evaluate(self):
-        return self.white_left - self.black_left
+        return len(self.get_board_pieces(WHITE)) - len(self.get_board_pieces(BLACK))
 
     def get_board_pieces(self, color):
         """gets the board pieces based on the color"""
@@ -55,6 +55,12 @@ class Board:
         self.board[row][col] = piece
         self.flip_pieces(row, col)
 
+        # decrease the number of pieces left
+        if self.color == WHITE:
+            self.white_left -= 1
+        else:
+            self.black_left -= 1
+
     def flip_pieces(self, row, col):
         # my color
         pieces_to_flip = []
@@ -70,13 +76,19 @@ class Board:
                 # found my color , or empty spot
                 if self.board[curr_row][curr_col] == 0 or self.board[curr_row][curr_col].color == color:
                     break
-                # flip it
                 else:
-                    pieces_to_flip.append((curr_row , curr_col))
+                    pieces_to_flip.append((curr_row, curr_col))
 
                 # update the moves
                 curr_row += x
                 curr_col += y
+
+            if (curr_row in range(8) and curr_col in range(8)) and self.board[curr_row][curr_col] != 0 and self.board[curr_row][curr_col].color == color:
+                for _row, _col in pieces_to_flip:
+                    # flip it
+                    self.board[_row][_col].flip()
+
+            pieces_to_flip = []
 
         return pieces_to_flip
 
@@ -90,8 +102,8 @@ class Board:
         for piece in self.get_board_pieces(color):
 
             # get vaild moves for this piece
-            for x, y in self.get_valid_moves(piece):
-                moves.add((x, y))
+            for row, col in self.get_valid_moves(piece):
+                moves.add((row, col))
         return moves
 
     def get_valid_moves(self, piece):
@@ -99,6 +111,7 @@ class Board:
         getting all the vaild moves for once piece
         """
         moves = []
+
         # add [1, 1], [-1, -1], [-1, 1], [1, -1] to add diagonals
         # DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
@@ -136,13 +149,15 @@ class Board:
     def create_board(self):
         # Initail state of the board
         """
-        creating a initail state of the board 
+        creating a initail state of the board
         """
         for row in range(ROWS):
             self.board.append([])
             for _ in range(COLS):
                 self.board[row].append(0)
+        # init
         self.board[3][3] = Piece(3, 3, WHITE)
         self.board[4][4] = Piece(4, 4, WHITE)
+
         self.board[3][4] = Piece(3, 4, BLACK)
         self.board[4][3] = Piece(4, 3, BLACK)
