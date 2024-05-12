@@ -2,7 +2,7 @@ import pygame
 
 from game.board import Board
 from game.constants import FPS, HEIGHT, WIDTH, get_coordinate_mouse
-from game.mygame import Game
+from game.controller import Game
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -23,9 +23,9 @@ def main():
         #     value, new_board = minimax(game.get_board(), 3, WHITE, game)
         #     game.ai_move(new_board)
 
-        # if game.winner() != None:
-        #     print(game.winner())
-        #     run = False
+        if game.winner() != None:
+            print(game.winner())
+            run = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
