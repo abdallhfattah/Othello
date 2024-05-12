@@ -58,7 +58,8 @@ class Board:
     def flip_pieces(self, row, col):
         # my color
         pieces_to_flip = []
-        color = self.board[row][col]
+
+        color = self.board[row][col].color
 
         # try moving in 4 directions
         for x,  y in DIRECTIONS:
@@ -68,17 +69,15 @@ class Board:
             while curr_row in range(8) and curr_col in range(8):
                 # found my color , or empty spot
                 if self.board[curr_row][curr_col] == 0 or self.board[curr_row][curr_col].color == color:
-                    print('color: ', color)
                     break
                 # flip it
                 else:
-                    # pieces_to_flip.append(self.board[curr_row][curr_col])
-                    pieces_to_flip.append((curr_row, curr_col))
+                    pieces_to_flip.append((curr_row , curr_col))
 
                 # update the moves
                 curr_row += x
                 curr_col += y
-        print(pieces_to_flip)
+
         return pieces_to_flip
 
     def get_moves(self, color):
@@ -123,7 +122,7 @@ class Board:
             while row in range(8) and col in range(8):
                 curr_piece = self.board[row][col]
                 if curr_piece == 0 or curr_piece.color == piece.color:
-                    if IS_OPPONENT:
+                    if IS_OPPONENT and curr_piece == 0:
                         moves.append((row, col))
                     break
                 if curr_piece != 0 and curr_piece.color == opponent_color:
