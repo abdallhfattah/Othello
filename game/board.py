@@ -1,22 +1,34 @@
+"""Board module"""
 import pygame
-from .constants import WHITE, SQUARE_SIZE, BLACK, ROWS, COLS, GREEN, WIDTH, HEIGHT
+
+from .constants import (BLACK, COLS, DIRECTIONS, GREEN, HEIGHT, ROWS, WHITE,
+                        WIDTH)
 from .piece import Piece
 
 
 class Board:
+    """
+    Board Class
+    """
+
     def __init__(self) -> None:
+        """initial state"""
         self.board = []
         self.white_left = 30
         self.black_left = 30
         self.create_board()
 
     def draw_grid(self, window):
+        """Drawing The Green background and lines of the Window"""
         window.fill(GREEN)
         for row in range(ROWS):
-            pygame.draw.line(window, BLACK, (row * 100, 0), (row * 100, WIDTH), 3)
-            pygame.draw.line(window, BLACK, (0, row * 100), (HEIGHT, row * 100), 3)
+            pygame.draw.line(window, BLACK, (row * 100, 0),
+                             (row * 100, WIDTH), 2)
+            pygame.draw.line(window, BLACK, (0, row * 100),
+                             (HEIGHT, row * 100), 2)
 
     def draw(self, window):
+        """draws the board and every piece in the Board"""
         self.draw_grid(window)
         for row in range(ROWS):
             for col in range(COLS):
@@ -29,25 +41,78 @@ class Board:
         return self.white_left - self.black_left
 
     def get_board_pieces(self, color):
+        """gets the board peices based on the color"""
         pieces = []
         for row in self.board:
             for piece in row:
                 if piece != 0 and piece.color == color:
                     pieces.append(piece)
         return pieces
-    
+
+    def insert_piece(self, row, col, color):
+        piece = Piece(row, col, color)
+        # put the piece
+        self.board[row][col] = piece
+        self.flip_pieces(row, col)
+
+    def flip_pieces(self, row, col):
+        # my color
+        color = self.board[row][col]
+
+        # try moving in 4 directions
+        for x,  y in DIRECTIONS:
+            curr_row = row + x
+            curr_col = col + y
+            # flip untill you find a empty spot
+            while curr_row in range(8) and curr_col in range(8):
+                # found my color , or empty spot
+                if self.board[curr_row][curr_col] == 0 or self.board[curr_row][curr_col].color == color:
+                    break
+
+                # flip it
+                else:
+                    self.board[curr_row][curr_col].flip()
+
+                # update the moves
+                curr_row += x
+                curr_col += y
+
+    def get_moves(self, color):
+        """gets all the  vaild move for a color"""
+
+        # insure there is no duplication , minimizing the time taken by the minimax algorithm
+        moves = set()
+
+        # get all the peices inside the board with color
+        for peice in self.get_board_pieces(color):
+
+            # get vaild moves for this piece
+            for x, y in self.get_valid_moves(peice):
+                moves.add((x, y))
+        return moves
+
     def get_valid_moves(self, piece):
+        """
+        getting all the vaild moves for once piece
+        """
         moves = []
-        # added [1, 1], [-1, -1], [-1, 1], [1, -1] to add diagonals
-        directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+        # add [1, 1], [-1, -1], [-1, 1], [1, -1] to add diagonals
+
+        # 0 1 -> right
+        # 0 -1 -> left
+
+        # 1 0 -> down
+        # -1 0 -> up
+
         curr_row = piece.row
         curr_col = piece.col
 
         opponent_color = WHITE if piece.color == BLACK else BLACK
 
-        for x, y in directions:
+        for x, y in DIRECTIONS:
             row = curr_row + x
             col = curr_col + y
+
             IS_OPPONENT = False
 
             while row in range(8) and col in range(8):
@@ -55,15 +120,20 @@ class Board:
                 if curr_piece == 0:
                     if IS_OPPONENT:
                         moves.append((row, col))
-                    else:
-                        break
+                    break
                 if curr_piece != 0 and curr_piece.color == opponent_color:
                     IS_OPPONENT = True
+
                 row += x
                 col += y
+
         return moves
 
     def create_board(self):
+        # Initail state of the board
+        """
+        creating a initail state of the board 
+        """
         for row in range(ROWS):
             self.board.append([])
             for _ in range(COLS):
