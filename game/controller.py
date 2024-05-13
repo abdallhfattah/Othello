@@ -30,7 +30,6 @@ class Game:
 
     def get_vaild_moves(self):
         self.valid_moves = self.board.get_moves(self.turn)
-        print(self.valid_moves)
 
     def winner(self):
         return self.board.winner(self.unmoved)
