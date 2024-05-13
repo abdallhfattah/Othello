@@ -71,4 +71,6 @@ class Game:
 
     def ai_move(self, board):
         self.board = board
+        print("evaluation = ", end='')
+        print(self.board.evaluate())
         self.change_turn()
