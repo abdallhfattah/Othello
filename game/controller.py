@@ -11,6 +11,7 @@ class Game:
     def __init__(self, window):
         self._init()
         self.window = window
+        self.unmoved = 0
 
     def update(self):
         self.board.draw(self.window)
@@ -32,7 +33,7 @@ class Game:
         print(self.valid_moves)
 
     def winner(self):
-        return self.board.winner()
+        return self.board.winner(self.unmoved)
 
     def reset(self):
         self._init()
@@ -48,12 +49,15 @@ class Game:
 
         # if a player has not moves i switch to the other player
         if(moves == set()):
-            self.change_turn(self)
+            self.change_turn()
+            self.unmoved += 1
+            return
 
         for move in moves:
             row, col = move
             pygame.draw.circle(self.window, self.turn, (col * SQUARE_SIZE + SQUARE_SIZE//2,
                                                         row * SQUARE_SIZE + SQUARE_SIZE//2), 40, width=1)
+        self.unmoved = 0
 
     def change_turn(self):
         """changing turn between opponents"""
@@ -66,6 +70,6 @@ class Game:
     def get_board(self):
         return self.board
 
-    # def ai_move(self, board):
-    #     self.board = board
-    #     self.change_turn()
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()
