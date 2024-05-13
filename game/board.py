@@ -1,8 +1,8 @@
 """Board module"""
 import pygame
 
-from .constants import (BLACK, COLS, CORNER_SCORE, DIRECTIONS, GREEN, HEIGHT,
-                        ROWS, WHITE, WIDTH)
+from .constants import (BLACK, COLS, CORNER_SCORE, DIRECTIONS, GREEN, MOBILITY_SCORE, HEIGHT,
+                        ROWS, WHITE, WIDTH, CORNERS)
 from .piece import Piece
 
 
@@ -38,18 +38,30 @@ class Board:
 
     # utility function
     def evaluate(self):
-        #TODO : enhance the evalution function
+        # TODO : enhance the evaluation function
+
+        # evaluate on mobility (early game > late game)
+        white_mobility = len(self.get_moves(WHITE)) * (self.white_left / 15)
+        black_mobility = len(self.get_moves(BLACK)) * (self.black_left / 15)
+        mobility = MOBILITY_SCORE * (white_mobility - black_mobility)
+
+        # evaluate on corners
         corners = 0
-        count_corners = 0
+        white_corners = 0
+        black_corners = 0
 
-        count_corners += int(self.board[0][0].color == WHITE)
-        count_corners += int(self.board[0][7].color == WHITE)
-        count_corners += int(self.board[7][7].color == WHITE)
-        count_corners += int(self.board[7][0].color == WHITE)
+        for row, col in CORNERS:
+            if self.board[row][col] != 0:
+                white_corners += int(self.board[row][col].color == WHITE)
+                black_corners += int(self.board[row][col].color == BLACK)
 
-        corners = CORNER_SCORE * (count_corners)
+        corners = CORNER_SCORE * (white_corners - black_corners)
 
-        return len(self.get_board_pieces(WHITE)) - len(self.get_board_pieces(BLACK))
+        # evaluate on count of pieces on board
+        white_on_board = len(self.get_board_pieces(WHITE))
+        black_on_board = len(self.get_board_pieces(BLACK))
+
+        return white_on_board + corners + mobility - black_on_board
 
     def get_board_pieces(self, color):
         """gets the board pieces based on the color"""
@@ -104,7 +116,7 @@ class Board:
         return pieces_to_flip
 
     def get_moves(self, color):
-        """gets all the  vaild move for a color"""
+        """gets all the  valid move for a color"""
 
         # insure there is no duplication , minimizing the time taken by the minimax algorithm
         moves = set()
