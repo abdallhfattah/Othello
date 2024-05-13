@@ -1,8 +1,8 @@
 """Board module"""
 import pygame
 
-from .constants import (BLACK, COLS, DIRECTIONS, GREEN, HEIGHT, ROWS, WHITE,
-                        WIDTH)
+from .constants import (BLACK, COLS, CORNER_SCORE, DIRECTIONS, GREEN, HEIGHT,
+                        ROWS, WHITE, WIDTH)
 from .piece import Piece
 
 
@@ -38,6 +38,17 @@ class Board:
 
     # utility function
     def evaluate(self):
+        #TODO : enhance the evalution function
+        corners = 0
+        count_corners = 0
+
+        count_corners += int(self.board[0][0].color == WHITE)
+        count_corners += int(self.board[0][7].color == WHITE)
+        count_corners += int(self.board[7][7].color == WHITE)
+        count_corners += int(self.board[7][0].color == WHITE)
+
+        corners = CORNER_SCORE * (count_corners)
+
         return len(self.get_board_pieces(WHITE)) - len(self.get_board_pieces(BLACK))
 
     def get_board_pieces(self, color):
@@ -56,7 +67,7 @@ class Board:
         self.flip_pieces(row, col)
 
         # decrease the number of pieces left
-        if self.color == WHITE:
+        if color == WHITE:
             self.white_left -= 1
         else:
             self.black_left -= 1
@@ -161,3 +172,17 @@ class Board:
 
         self.board[3][4] = Piece(3, 4, BLACK)
         self.board[4][3] = Piece(4, 3, BLACK)
+
+    def winner(self, unmoved=0):
+        white_occupy = len(self.get_board_pieces(WHITE))
+        black_occupy = len(self.get_board_pieces(BLACK))
+        if white_occupy + black_occupy == 64 or unmoved >= 2:
+            print(white_occupy, "   ", black_occupy)
+            if white_occupy == black_occupy:
+                return "Tie"
+            elif white_occupy > black_occupy:
+                return "white"
+            else:
+                return "black"
+
+        return None
