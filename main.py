@@ -1,7 +1,7 @@
 import pygame
 
 from game.board import Board
-from game.constants import (FPS, HEIGHT, SEARCH_DEPTH, WHITE, WIDTH,
+from game.constants import (FPS, HEIGHT, EASY, MEDIUM, HARD, WHITE, WIDTH,
                             get_coordinate_mouse)
 from game.controller import Game
 from minimax.minimaxAlgo import minimax
@@ -25,13 +25,14 @@ def main():
                 game.change_turn()
                 continue
 
-            value, new_board = minimax(game.get_board(), SEARCH_DEPTH, WHITE)
+            value, new_board = minimax(game.get_board(), HARD, WHITE)
             game.ai_move(new_board)
 
         if game.winner() != None:
             print(game.winner())
             # display the winner in GUI
             run = False
+            pygame.time.delay(10000)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
