@@ -20,6 +20,8 @@ GREEN = (0, 188, 140)
 DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
 CORNER_SCORE = 10
+MOBILITY_SCORE = 5
+CORNERS = [[0, 0], [0, 7], [7, 0], [7, 7]]
 
 # Render
 FPS = 60
@@ -38,4 +40,6 @@ PADDING = 15
 OUTLINE = 2
 
 # ai level
-SEARCH_DEPTH = 5
+EASY = 1
+MEDIUM = 3
+HARD = 5
