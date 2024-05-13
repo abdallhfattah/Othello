@@ -19,6 +19,7 @@ GREEN = (0, 188, 140)
 # directions ([1, 1], [-1, -1], [-1, 1], [1, -1])
 DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
+CORNER_SCORE = 10
 
 # Render
 FPS = 60
