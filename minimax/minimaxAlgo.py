@@ -12,30 +12,22 @@ def minimax(board, depth, max_player):
     if max_player:
         maxEval = float('-inf')
         best_move = None
-        for move in get_all_moves(board, WHITE):
-
-            # check the evalution of this move
-            evaluation = minimax(board, depth-1, False)[0]
+        for new_board in get_all_moves(board, WHITE):
+            # check the evalution of this new_board
+            evaluation = minimax(new_board, depth-1, False)[0]
             maxEval = max(maxEval, evaluation)
-
-            # if this move is the max evalution
+            # if this new_board is the max evalution
             if maxEval == evaluation:
-                best_move = move
-
+                best_move = new_board
         return maxEval, best_move
-
     else:
         minEval = float('inf')
         best_move = None
-        for move in get_all_moves(board, BLACK):
-
-            evaluation = minimax(board, depth - 1, True)[0]
-
+        for new_board in get_all_moves(board, BLACK):
+            evaluation = minimax(new_board, depth - 1, True)[0]
             minEval = min(minEval, evaluation)
-
             if minEval == evaluation:
-                best_move = move
-
+                best_move = new_board
         return minEval, best_move
 
 
@@ -51,7 +43,6 @@ def get_all_moves(board: Board, color):
         temp_board = deepcopy(board)
         new_board = simulate_move(row, col, temp_board, color)
         moves.append(new_board)
-
     return moves
 
 
