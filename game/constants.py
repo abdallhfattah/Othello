@@ -16,12 +16,16 @@ GREY = (128, 128, 128)
 
 GREEN = (0, 188, 140)
 
-# directions ([1, 1], [-1, -1], [-1, 1], [1, -1])
+# Diagonal directions ([1, 1], [-1, -1], [-1, 1], [1, -1])
 DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
-CORNER_SCORE = 10
+CORNER_SCORE = 50
 MOBILITY_SCORE = 5
+
+
 CORNERS = [[0, 0], [0, 7], [7, 0], [7, 7]]
+X_SQUARES = [[1, 1], [1, 6], [6, 1], [6, 6]]
+C_SQUARES = [[1, 0], [6, 0], [0, 1], [7, 1], [0, 6], [7, 6], [1, 7], [6, 7]]
 
 # Render
 FPS = 60
@@ -40,6 +44,6 @@ PADDING = 15
 OUTLINE = 2
 
 # ai level
-EASY = 1
-MEDIUM = 3
-HARD = 5
+EASY = 2
+MEDIUM = 4
+HARD = 6
