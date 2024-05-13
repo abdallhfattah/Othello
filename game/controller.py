@@ -16,7 +16,7 @@ class Game:
     def update(self):
         self.board.draw(self.window)
 
-        self.get_vaild_moves()
+        self.get_valid_moves()
 
         self.draw_valid_moves(self.valid_moves)
 
@@ -28,7 +28,7 @@ class Game:
         self.turn = BLACK
         self.valid_moves = set()
 
-    def get_vaild_moves(self):
+    def get_valid_moves(self):
         self.valid_moves = self.board.get_moves(self.turn)
 
     def winner(self):
