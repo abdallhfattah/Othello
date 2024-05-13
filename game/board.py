@@ -40,6 +40,8 @@ class Board:
     def evaluate(self):
         # TODO : enhance the evaluation function
 
+        # evaluate on x-squares and c-squares
+
         # evaluate on mobility (early game > late game)
         white_mobility = len(self.get_moves(WHITE)) * (self.white_left / 15)
         black_mobility = len(self.get_moves(BLACK)) * (self.black_left / 15)
@@ -52,10 +54,18 @@ class Board:
 
         for row, col in CORNERS:
             if self.board[row][col] != 0:
+                print("hellooo")
                 white_corners += int(self.board[row][col].color == WHITE)
                 black_corners += int(self.board[row][col].color == BLACK)
 
         corners = CORNER_SCORE * (white_corners - black_corners)
+        if white_corners != 0 or black_corners != 0:
+            print('white corners = ', end='')
+            print(white_corners)
+            print('black corners = ', end='')
+            print(black_corners)
+            print('corners: =', corners)
+
 
         # evaluate on count of pieces on board
         white_on_board = len(self.get_board_pieces(WHITE))
