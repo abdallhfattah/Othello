@@ -1,6 +1,6 @@
 import pygame
 
-from .constants import BLACK, GREY, OUTLINE, PADDING, RED, SQUARE_SIZE, WHITE
+from .constants import BLACK, GREY, OUTLINE, PADDING, SQUARE_SIZE, WHITE
 
 
 class Piece:
