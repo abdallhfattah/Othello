@@ -25,7 +25,7 @@ def main():
                 game.change_turn()
                 continue
 
-            value, new_board = minimax(game.get_board(), HARD, float('-inf'), float('inf'), WHITE)
+            value, new_board = minimax(game.get_board(), EASY, float('-inf'), float('inf'), WHITE)
             game.ai_move(new_board)
             game.update()
 

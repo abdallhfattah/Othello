@@ -3,7 +3,7 @@ import pygame
 
 from .constants import (BLACK, COLS, CORNER_SCORE, DIRECTIONS, GREEN, MOBILITY_SCORE, HEIGHT,
                         ROWS, WHITE, WIDTH, CORNERS)
-from .piece import Piece
+from .disk import Disk
 
 
 class Board:
@@ -46,25 +46,27 @@ class Board:
             for _ in range(COLS):
                 self.board[row].append(0)
         # init
-        self.board[3][3] = Piece(3, 3, WHITE)
-        self.board[4][4] = Piece(4, 4, WHITE)
+        self.board[3][3] = Disk(3, 3, WHITE)
+        self.board[4][4] = Disk(4, 4, WHITE)
 
-        self.board[3][4] = Piece(3, 4, BLACK)
-        self.board[4][3] = Piece(4, 3, BLACK)
+        self.board[3][4] = Disk(3, 4, BLACK)
+        self.board[4][3] = Disk(4, 3, BLACK)
 
     # utility function
     def evaluate(self):
-        # TODO : enhance the evaluation function
-
-        # evaluate on x-squares and c-squares
-
+        terminal_state = 0
+        # Winning state
+        if self.winner():
+            if self.winner() == WHITE:
+                terminal_state += 500
+            elif self.winner() == BLACK:
+                terminal_state -= 500
         # evaluate on mobility (early game > late game)
         white_mobility = len(self.get_moves(WHITE)) * (self.white_left / 15)
         black_mobility = len(self.get_moves(BLACK)) * (self.black_left / 15)
         mobility = MOBILITY_SCORE * (white_mobility - black_mobility)
 
         # evaluate on corners
-        corners = 0
         white_corners = 0
         black_corners = 0
 
@@ -74,19 +76,13 @@ class Board:
                 black_corners += int(self.board[row][col].color == BLACK)
 
         corners = CORNER_SCORE * (white_corners - black_corners)
-        # if white_corners != 0 or black_corners != 0:
-        #     print('white corners = ', end='')
-        #     print(white_corners)
-        #     print('black corners = ', end='')
-        #     print(black_corners)
-        #     print('corners: =', corners)
-
 
         # evaluate on count of pieces on board
         white_on_board = len(self.get_board_pieces(WHITE))
         black_on_board = len(self.get_board_pieces(BLACK))
+        on_board = white_on_board - black_on_board
 
-        return white_on_board + corners + mobility - black_on_board
+        return terminal_state + corners + mobility + on_board
 
     def get_board_pieces(self, color):
         """gets the board pieces based on the color"""
@@ -98,7 +94,7 @@ class Board:
         return pieces
 
     def insert_piece(self, row, col, color):
-        piece = Piece(row, col, color)
+        piece = Disk(row, col, color)
         # put the piece
         self.board[row][col] = piece
         self.flip_pieces(row, col)
@@ -162,11 +158,7 @@ class Board:
 
         # add [1, 1], [-1, -1], [-1, 1], [1, -1] to add diagonals
         # DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-        # 0 1 -> right
-        # 0 -1 -> left
-
-        # 1 0 -> down
-        # -1 0 -> up
+        # 0 1 -> right, 0 -1 -> left, 1 0 -> down, -1 0 -> up
 
         curr_row = piece.row
         curr_col = piece.col

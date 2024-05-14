@@ -2,7 +2,7 @@ import pygame
 
 from .board import Board
 from .constants import BLACK, SQUARE_SIZE, WHITE
-from .piece import Piece
+from .disk import Disk
 
 
 class GameController:

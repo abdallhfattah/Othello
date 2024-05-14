@@ -3,7 +3,7 @@ import pygame
 from .constants import BLACK, GREY, OUTLINE, PADDING, SQUARE_SIZE, WHITE
 
 
-class Piece:
+class Disk:
     def __init__(self, row, col, color) -> None:
         self.row = row
         self.col = col
