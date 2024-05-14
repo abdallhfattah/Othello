@@ -5,17 +5,16 @@ from .constants import BLACK, SQUARE_SIZE, WHITE
 from .piece import Piece
 
 
-class Game:
+class GameController:
     def __init__(self, window):
         self._init()
         self.window = window
+        # detect if both players can't make a move
         self.unmoved = 0
 
     def update(self):
         self.board.draw(self.window)
-
         self.get_valid_moves()
-
         self.draw_valid_moves(self.valid_moves)
 
         pygame.display.update()
@@ -43,7 +42,6 @@ class Game:
             self.turn = WHITE if self.turn == BLACK else BLACK
 
     def draw_valid_moves(self, moves):
-
         # if a player has not moves i switch to the other player
         if(moves == set()):
             self.change_turn()
@@ -67,8 +65,8 @@ class Game:
     def get_board(self):
         return self.board
 
-    def ai_move(self, board):
-        self.board = board
+    def ai_move(self, newState):
+        self.board = newState
         print("evaluation = ", end='')
         print(self.board.evaluate())
         self.change_turn()
