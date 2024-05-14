@@ -39,7 +39,7 @@ class GameController:
         if move in self.valid_moves:
             self.board.insert_piece(row,  col, self.turn)
             # flip the turn
-            self.turn = WHITE if self.turn == BLACK else BLACK
+            self.change_turn()
 
     def draw_valid_moves(self, moves):
         # if a player has not moves i switch to the other player
