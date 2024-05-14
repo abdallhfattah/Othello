@@ -5,7 +5,7 @@ from game.constants import BLACK, WHITE
 
 
 # minimax => board , depth , max_player
-def minimax(board, depth, max_player):
+def minimax(board, depth, alpha, beta, max_player):
     if depth == 0 or board.winner() != None:
         return board.evaluate(), board
 
@@ -13,21 +13,27 @@ def minimax(board, depth, max_player):
         maxEval = float('-inf')
         best_move = None
         for new_board in get_all_moves(board, WHITE):
-            # check the evalution of this new_board
-            evaluation = minimax(new_board, depth-1, False)[0]
+            # check the evaluation of this new_board
+            evaluation = minimax(new_board, depth - 1, alpha, beta, False)[0]
             maxEval = max(maxEval, evaluation)
-            # if this new_board is the max evalution
+            alpha = max(alpha, evaluation)
+            # if this new_board is the max evaluation
             if maxEval == evaluation:
                 best_move = new_board
+            if beta <= alpha:
+                break
         return maxEval, best_move
     else:
         minEval = float('inf')
         best_move = None
         for new_board in get_all_moves(board, BLACK):
-            evaluation = minimax(new_board, depth - 1, True)[0]
+            evaluation = minimax(new_board, depth - 1, alpha, beta, True)[0]
             minEval = min(minEval, evaluation)
+            beta = min(beta, evaluation)
             if minEval == evaluation:
                 best_move = new_board
+            if beta <= alpha:
+                break
         return minEval, best_move
 
 
