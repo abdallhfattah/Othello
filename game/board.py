@@ -36,6 +36,22 @@ class Board:
                 if piece != 0:
                     piece.draw(window)
 
+    def create_board(self):
+        # Initial state of the board
+        """
+        creating a initial state of the board
+        """
+        for row in range(ROWS):
+            self.board.append([])
+            for _ in range(COLS):
+                self.board[row].append(0)
+        # init
+        self.board[3][3] = Piece(3, 3, WHITE)
+        self.board[4][4] = Piece(4, 4, WHITE)
+
+        self.board[3][4] = Piece(3, 4, BLACK)
+        self.board[4][3] = Piece(4, 3, BLACK)
+
     # utility function
     def evaluate(self):
         # TODO : enhance the evaluation function
@@ -54,17 +70,16 @@ class Board:
 
         for row, col in CORNERS:
             if self.board[row][col] != 0:
-                print("hellooo")
                 white_corners += int(self.board[row][col].color == WHITE)
                 black_corners += int(self.board[row][col].color == BLACK)
 
         corners = CORNER_SCORE * (white_corners - black_corners)
-        if white_corners != 0 or black_corners != 0:
-            print('white corners = ', end='')
-            print(white_corners)
-            print('black corners = ', end='')
-            print(black_corners)
-            print('corners: =', corners)
+        # if white_corners != 0 or black_corners != 0:
+        #     print('white corners = ', end='')
+        #     print(white_corners)
+        #     print('black corners = ', end='')
+        #     print(black_corners)
+        #     print('corners: =', corners)
 
 
         # evaluate on count of pieces on board
@@ -141,13 +156,12 @@ class Board:
 
     def get_valid_moves(self, piece):
         """
-        getting all the vaild moves for once piece
+        getting all the valid moves for once piece
         """
         moves = []
 
         # add [1, 1], [-1, -1], [-1, 1], [1, -1] to add diagonals
         # DIRECTIONS = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-
         # 0 1 -> right
         # 0 -1 -> left
 
@@ -179,21 +193,6 @@ class Board:
 
         return moves
 
-    def create_board(self):
-        # Initail state of the board
-        """
-        creating a initail state of the board
-        """
-        for row in range(ROWS):
-            self.board.append([])
-            for _ in range(COLS):
-                self.board[row].append(0)
-        # init
-        self.board[3][3] = Piece(3, 3, WHITE)
-        self.board[4][4] = Piece(4, 4, WHITE)
-
-        self.board[3][4] = Piece(3, 4, BLACK)
-        self.board[4][3] = Piece(4, 3, BLACK)
 
     def winner(self, unmoved=0):
         white_occupy = len(self.get_board_pieces(WHITE))
