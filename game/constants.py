@@ -46,4 +46,4 @@ OUTLINE = 2
 # ai level
 EASY = 2
 MEDIUM = 4
-HARD = 6
+HARD = 8
