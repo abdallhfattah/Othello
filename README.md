@@ -38,10 +38,10 @@ python main.py
 
 ## Game shots
 initial state
-![OthelloGame](init_state.png)
+![OthelloGame](screenshots/init_state.png)
 
 late game state , note Computer is White
-![OthelloGame](late_state.png)
+![OthelloGame](screenshots/late_state.png)
 
 ## Contributing
 
