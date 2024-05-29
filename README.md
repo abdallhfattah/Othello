@@ -36,6 +36,13 @@ python main.py
 - The difficulty level of the AI can be adjusted by changing the depth parameter in the Minimax algorithm implementation.
 - The AI player calculates the best move based on the current board state and the specified depth level, using Alpha-Beta Pruning for improved efficiency.
 
+## Game shots
+initial state
+![OthelloGame](init_state.png)
+
+late game state , note Computer is White
+![OthelloGame](late_state.png)
+
 ## Contributing
 
 Contributions are welcome! Feel free to open issues for any bugs or suggestions for improvements. Pull requests are also appreciated.
